@@ -1,0 +1,37 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Udyam Registration Form Model
+model UdyamRegistration {
+  id               Int      @id @default(autoincrement())
+  
+  // Aadhaar Information
+  aadhaarNumber    String   @db.VarChar(12)
+  entrepreneurName String   @db.VarChar(255)
+  
+  // PAN Information  
+  panNumber        String   @db.VarChar(10)
+  entityType       String   @db.VarChar(100)
+  panName          String?  @db.VarChar(255) // Name as per PAN (optional, might come from verification)
+  
+  // Form Status
+  isVerified       Boolean  @default(false)
+  
+  // Timestamps
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  
+  // Indexes for performance
+  @@unique([aadhaarNumber])
+  @@unique([panNumber])
+  @@map("udyam_registrations")
+}

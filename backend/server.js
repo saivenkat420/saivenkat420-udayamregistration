@@ -34,34 +34,40 @@ try {
     });
   });
   
-  console.log('Starting server...');
-  
-  app.listen(PORT, async () => {
-    console.log(`Udyam Registration API running on port ${PORT}`);
+  // Initialize database connection for Vercel
+  connectDatabase().then(() => {
+    console.log('Ready to accept Aadhaar and PAN submissions');
+  }).catch((error) => {
+    console.error('Failed to connect to database:', error);
+  });
+
+  // For Vercel, export the app instead of listening
+  if (process.env.NODE_ENV !== 'production') {
+    console.log('Starting server...');
+    app.listen(PORT, () => {
+      console.log(`Udyam Registration API running on port ${PORT}`);
+    });
     
-    // Initialize database connection
-    try {
-      await connectDatabase();
-      console.log('Ready to accept Aadhaar and PAN submissions');
-    } catch (error) {
-      console.error('Failed to connect to database. Server running without database connection.');
-    }
-  });
+    // Graceful shutdown for local development
+    process.on('SIGINT', async () => {
+      console.log('\nGracefully shutting down...');
+      await disconnectDatabase();
+      process.exit(0);
+    });
+    
+    process.on('SIGTERM', async () => {
+      console.log('\nGracefully shutting down...');
+      await disconnectDatabase();
+      process.exit(0);
+    });
+  }
   
-  // Graceful shutdown
-  process.on('SIGINT', async () => {
-    console.log('\nGracefully shutting down...');
-    await disconnectDatabase();
-    process.exit(0);
-  });
-  
-  process.on('SIGTERM', async () => {
-    console.log('\nGracefully shutting down...');
-    await disconnectDatabase();
-    process.exit(0);
-  });
+  // Export for Vercel
+  module.exports = app;
   
 } catch (error) {
   console.error('Error starting server:', error);
-  process.exit(1);
+  if (process.env.NODE_ENV !== 'production') {
+    process.exit(1);
+  }
 }

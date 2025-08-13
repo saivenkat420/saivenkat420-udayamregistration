@@ -1,0 +1,32 @@
+{
+  "name": "ai-udyam-registration-portal",
+  "version": "1.0.0",
+  "description": "AI-powered Udyam Registration Portal built entirely by artificial intelligence",
+  "scripts": {
+    "build": "cd frontend && npm run build",
+    "start": "cd backend && npm start",
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:backend": "cd backend && npm run dev",
+    "dev:frontend": "cd frontend && npm start",
+    "install:backend": "cd backend && npm install",
+    "install:frontend": "cd frontend && npm install"
+  },
+  "keywords": [
+    "udyam",
+    "registration",
+    "ai-powered",
+    "react",
+    "nodejs",
+    "prisma",
+    "postgresql",
+    "vercel"
+  ],
+  "author": "AI Assistant",
+  "license": "MIT",
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

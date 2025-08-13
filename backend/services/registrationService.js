@@ -5,13 +5,22 @@ class RegistrationService {
   // Create a new Udyam registration
   async createRegistration(data) {
     try {
+      // Ensure database connection
+      await prisma.$connect();
+
+      // Log the data being sent to Prisma
+      console.log('Creating registration with data:', {
+        ...data,
+        aadhaarNumber: data.aadhaarNumber?.substring(0, 4) + '****'
+      });
+
       const registration = await prisma.udyamRegistration.create({
         data: {
           aadhaarNumber: data.aadhaarNumber,
           entrepreneurName: data.entrepreneurName,
           panNumber: data.panNumber,
           entityType: data.entityType,
-          panName: data.panName || null,
+          panName: data.panName || data.entrepreneurName, // Use entrepreneur name if PAN name not provided
           isVerified: true // Since we're validating before storing
         }
       });
@@ -19,22 +28,37 @@ class RegistrationService {
       console.log('Registration created successfully:', registration.id);
       return registration;
     } catch (error) {
-      console.error('Failed to create registration:', error);
+      console.error('Failed to create registration:', {
+        error: error.message,
+        code: error.code,
+        meta: error.meta
+      });
       
       // Handle specific Prisma errors
       if (error.code === 'P2002') {
         // Unique constraint violation
-        const target = error.meta?.target;
-        if (target?.includes('aadhaarNumber')) {
+        const target = error.meta?.target?.[0] || '';
+        if (target.includes('aadhaarNumber')) {
           throw new Error('Aadhaar number already registered');
         }
-        if (target?.includes('panNumber')) {
+        if (target.includes('panNumber')) {
           throw new Error('PAN number already registered');
         }
         throw new Error('Registration already exists');
       }
+
+      if (error.code === 'P1001') {
+        throw new Error('Unable to connect to database');
+      }
       
-      throw new Error('Failed to save registration data');
+      if (error.code === 'P2000') {
+        throw new Error('Invalid data format');
+      }
+      
+      throw new Error(`Database error: ${error.message}`);
+    } finally {
+      // Ensure connection is closed in serverless environment
+      await prisma.$disconnect();
     }
   }
   

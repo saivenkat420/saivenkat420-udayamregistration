@@ -125,10 +125,21 @@ router.post('/submit', async (req, res) => {
       });
     }
     
+    // Log detailed error for debugging
+    console.error('Detailed error:', {
+      message: error.message,
+      stack: error.stack,
+      code: error.code,
+      meta: error.meta
+    });
+
+    // Return appropriate error response
     res.status(500).json({ 
       success: false, 
-      error: error.message,
-      message: 'Form submission failed due to server error'
+      error: {
+        code: error.code || '500',
+        message: error.message || 'Form submission failed due to server error'
+      }
     });
   }
 });

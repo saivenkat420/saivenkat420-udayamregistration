@@ -1,9 +1,13 @@
 const { PrismaClient } = require('@prisma/client');
 
-// Initialize Prisma Client
-const prisma = new PrismaClient({
-  log: ['query', 'info', 'warn', 'error'], // Enable logging for development
+// Initialize Prisma Client with global caching for serverless
+const globalForPrisma = global;
+
+const prisma = globalForPrisma.prisma || new PrismaClient({
+  log: ['error'], // Minimal logging for production
 });
+
+if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;
 
 // Database connection test
 const connectDatabase = async () => {

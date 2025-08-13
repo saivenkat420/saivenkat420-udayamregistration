@@ -130,7 +130,15 @@ router.post('/submit', async (req, res) => {
       message: error.message,
       stack: error.stack,
       code: error.code,
-      meta: error.meta
+      meta: error.meta,
+      name: error.name
+    });
+
+    // Log environment info for debugging
+    console.error('Environment info:', {
+      NODE_ENV: process.env.NODE_ENV,
+      DATABASE_URL_exists: !!process.env.DATABASE_URL,
+      DATABASE_URL_start: process.env.DATABASE_URL?.substring(0, 20) + '...'
     });
 
     // Return appropriate error response
@@ -138,7 +146,8 @@ router.post('/submit', async (req, res) => {
       success: false, 
       error: {
         code: error.code || '500',
-        message: error.message || 'Form submission failed due to server error'
+        message: error.message || 'Form submission failed due to server error',
+        details: process.env.NODE_ENV !== 'production' ? error.stack : undefined
       }
     });
   }

@@ -65,6 +65,9 @@ class RegistrationService {
   // Check if Aadhaar or PAN already exists
   async checkExistingRegistration(aadhaarNumber, panNumber) {
     try {
+      // Ensure database connection
+      await prisma.$connect();
+
       const existing = await prisma.udyamRegistration.findFirst({
         where: {
           OR: [
@@ -82,8 +85,21 @@ class RegistrationService {
       
       return existing;
     } catch (error) {
-      console.error('Failed to check existing registration:', error);
+      console.error('Failed to check existing registration:', {
+        error: error.message,
+        code: error.code,
+        meta: error.meta
+      });
+      
+      // Handle specific Prisma errors
+      if (error.code === 'P1001') {
+        throw new Error('Unable to connect to database');
+      }
+      
       throw new Error('Failed to verify registration uniqueness');
+    } finally {
+      // Ensure connection is closed in serverless environment
+      await prisma.$disconnect();
     }
   }
   

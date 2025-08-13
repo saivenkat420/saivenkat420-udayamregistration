@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "AI-powered Udyam Registration Portal built entirely by artificial intelligence",
   "scripts": {
-    "build": "cd backend && npx prisma generate && cd ../frontend && npm run build",
+    "build": "cd backend && npx prisma generate && npx prisma db push --accept-data-loss && cd ../frontend && npm run build",
     "start": "cd backend && npm start",
     "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
     "dev:backend": "cd backend && npm run dev",

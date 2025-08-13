@@ -36,11 +36,11 @@ const UdyamFooter = () => {
           <FooterSection>
             <h3>Our Services</h3>
             <ServiceLinks>
-              <li><a href="#">CHAMPIONS</a></li>
-              <li><a href="#">MSME Samadhaan</a></li>
-              <li><a href="#">MSME Sambandh</a></li>
-              <li><a href="#">MSME Dashboard</a></li>
-              <li><a href="#">Entrepreneurship Skill Development Programme (ESDP)</a></li>
+              <li><button type="button">CHAMPIONS</button></li>
+              <li><button type="button">MSME Samadhaan</button></li>
+              <li><button type="button">MSME Sambandh</button></li>
+              <li><button type="button">MSME Dashboard</button></li>
+              <li><button type="button">Entrepreneurship Skill Development Programme (ESDP)</button></li>
             </ServiceLinks>
           </FooterSection>
           

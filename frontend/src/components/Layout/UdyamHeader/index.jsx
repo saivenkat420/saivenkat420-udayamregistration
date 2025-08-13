@@ -10,12 +10,10 @@ import {
   DropdownItem,
   DropdownArrow,
   TitleSection,
-  TitleContent,
-  MobileMenuToggle
+  TitleContent
 } from './styles';
 
 const UdyamHeader = () => {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeNav, setActiveNav] = useState('Home'); // Default active navigation
 
   const navigationItems = [

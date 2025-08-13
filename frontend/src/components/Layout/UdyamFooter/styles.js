@@ -69,11 +69,16 @@ export const ServiceLinks = styled.ul`
   li {
     margin-bottom: 10px;
     
-    a {
+    a, button {
       color: ${udyamColors.text.white};
       text-decoration: none;
       font-size: 14px;
       transition: color 0.3s ease;
+      background: none;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      text-align: left;
       
       &:hover {
         color: #AED6F1;

@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styled, { ThemeProvider, createGlobalStyle } from 'styled-components';
 import { theme } from './theme';
 import { udyamColors } from './theme/udyamColors';
-import { UdyamHeader, AadhaarStep, UdyamFooter } from './components';
-import { udyamApi } from './services/api';
+import { UdyamHeader, AadhaarStep } from './components';
 
 // Global styles
 const GlobalStyle = createGlobalStyle`
